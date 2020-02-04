@@ -7,11 +7,11 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
-export default () => (
+export default ({onCancel}) => (
   <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
     <ActivityIndicator size="large" />
     <StatusBar barStyle="default" />
-    <TouchableWithoutFeedback onPress={() => {}}>
+    <TouchableWithoutFeedback onPress={() => onCancel()}>
       <Text>Cancel</Text>
     </TouchableWithoutFeedback>
   </View>

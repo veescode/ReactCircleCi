@@ -9,8 +9,10 @@ import renderer from 'react-test-renderer';
 import Loading from '../Loading';
 
 describe('Loader tests', () => {
+  const onCancel = jest.fn();
+  const instance = renderer.create(<Loading onCancel={onCancel} />);
+
   it('Should render without any issues', () => {
-    const instance = renderer.create(<Loading />);
     expect(instance).toMatchSnapshot();
   });
 });
