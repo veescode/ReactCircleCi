@@ -34,7 +34,7 @@ workflows:
           requires:
             - packages
           - checkout
-          - restore_cache: *node_modules_cache
+#          - restore_cache: *node_modules_cache
           - run: yarn test --coverage
           - codecov/upload:
             file: coverage/*.json
@@ -44,7 +44,7 @@ workflows:
           - requires:
               - packages
           - checkout
-          - restore_cache: *node_modules_cache
+#          - restore_cache: *node_modules_cache
           - run: yarn lint
 
 
