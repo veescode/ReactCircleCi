@@ -15,18 +15,17 @@ aliases:
       - node_modules
     key: v1-dependencies-{{ checksum "package.json" }}
 
-  - &dependencies
-    - "packages"
-
 workflows:
   version: 2.1
   master:
     jobs:
       - packages
-      - tests
-        requires: *dependencies
-      - lint
-        requires: *dependencies
+      - tests:
+        requires:
+          - packages
+      - lint:
+        requires:
+          - packages
 
 orbs:
   codecov: codecov/codecov@1.0.5
