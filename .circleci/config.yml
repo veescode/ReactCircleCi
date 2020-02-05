@@ -14,38 +14,44 @@ aliases:
     key: v1-dependencies-{{ checksum "package.json" }}
 
 version: 2.1
-orbs:
-  codecov: codecov/codecov@1.0.5
+
 workflows:
   version: 2.1
   master:
     jobs:
-      packages:
-        <<: *node_image
+      - packages
+      - tests
+        requires:
+          - packages
+      - lint
+        requires:
+          - packages
 
-        steps:
-          - checkout
-          - restore_cache: *node_modules_cache
-          - run: yarn install
-          - save_cache: *save_node_modules_cache
+orbs:
+  codecov: codecov/codecov@1.0.5
+jobs:
+  packages:
+    <<: *node_image
 
-      tests:
-        steps:
-          requires:
-            - packages
-          - checkout
-          - restore_cache: *node_modules_cache
-          - run: yarn test --coverage
-          - codecov/upload:
-            file: coverage/*.json
+    steps:
+      - checkout
+      - restore_cache: *node_modules_cache
+      - run: yarn install
+      - save_cache: *save_node_modules_cache
 
-      lint:
-        steps:
-          - requires:
-              - packages
-          - checkout
-          - restore_cache: *node_modules_cache
-          - run: yarn lint
+  tests:
+    steps:
+      - checkout
+      - restore_cache: *node_modules_cache
+      - run: yarn test --coverage
+      - codecov/upload:
+        file: coverage/*.json
+
+  lint:
+    steps:
+      - checkout
+      - restore_cache: *node_modules_cache
+      - run: yarn lint
 
 
 
