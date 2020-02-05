@@ -14,7 +14,6 @@ aliases:
     key: v1-dependencies-{{ checksum "package.json" }}
 
 version: 2.1
-
 workflows:
   version: 2.1
   master:
@@ -40,6 +39,8 @@ jobs:
       - save_cache: *save_node_modules_cache
 
   tests:
+    <<: *node_image
+
     steps:
       - checkout
       - restore_cache: *node_modules_cache
@@ -48,6 +49,8 @@ jobs:
         file: coverage/*.json
 
   lint:
+    <<: *node_image
+
     steps:
       - checkout
       - restore_cache: *node_modules_cache
