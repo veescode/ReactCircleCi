@@ -6,9 +6,9 @@ aliases:
         - image: circleci/node:10.16.3
 
   - &node_modules_cache
-    - keys:
-        - v1-dependencies-{{ checksum "package.json" }}
-        - v1-dependencies-
+    keys:
+      - v1-dependencies-{{ checksum "package.json" }}
+      - v1-dependencies-
 
   - &save_node_modules_cache
     paths:
