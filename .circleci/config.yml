@@ -15,18 +15,6 @@ aliases:
       - node_modules
     key: v1-dependencies-{{ checksum "package.json" }}
 
-workflows:
-  version: 2.1
-  master:
-    jobs:
-      - packages
-      - tests:
-        requires:
-          - packages
-      - lint:
-        requires:
-          - packages
-
 orbs:
   codecov: codecov/codecov@1.0.5
 
@@ -58,6 +46,17 @@ jobs:
       - restore_cache: *node_modules_cache
       - run: yarn lint
 
+workflows:
+  version: 2.0
+  master:
+    jobs:
+      - packages
+      - tests:
+        requires:
+          - packages
+      - lint:
+        requires:
+          - packages
 
 
 
