@@ -37,8 +37,6 @@ jobs:
       - run: yarn test --coverage
       - codecov/upload:
         file: coverage/*.json
-      - store_test_results:
-        path: coverage
 
   lint:
     <<: *node_image
