@@ -37,6 +37,8 @@ jobs:
       - run: yarn test --coverage
       - codecov/upload:
         file: coverage/*.json
+      - store_test_results:
+            path: coverage
 
   lint:
     <<: *node_image
@@ -47,16 +49,14 @@ jobs:
       - run: yarn lint
 
 workflows:
-  version: 2.0
+  version: 2.1
   master:
     jobs:
       - packages
       - tests:
-        requires:
-          - packages
+        requires: packages
       - lint:
-        requires:
-          - packages
+        requires: packages
 
 
 
