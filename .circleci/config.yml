@@ -1,29 +1,62 @@
 version: 2.1
-orbs:
-  codecov: codecov/codecov@1.0.5
-jobs:
-  build:
+
+aliases:
+  - &node_image
     docker:
       - image: circleci/node:10.16.3
 
+  - &node_modules_cache
+    keys:
+      - v1-dependencies-{{ checksum "package.json" }}
+      - v1-dependencies-
+
+  - &save_node_modules_cache
+    paths:
+      - node_modules
+    key: v1-dependencies-{{ checksum "package.json" }}
+
+orbs:
+  codecov: codecov/codecov@1.0.5
+
+jobs:
+  packages:
+    <<: *node_image
+
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
-
+      - restore_cache: *node_modules_cache
       - run: yarn install
+      - save_cache: *save_node_modules_cache
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+  tests:
+    <<: *node_image
 
-      - run: yarn lint
+    steps:
+      - checkout
+      - restore_cache: *node_modules_cache
       - run: yarn test --coverage
       - codecov/upload:
-          file: coverage/*.json
+        file: coverage/*.json
+
+  lint:
+    <<: *node_image
+
+    steps:
+      - checkout
+      - restore_cache: *node_modules_cache
+      - run: yarn lint
+
+workflows:
+  version: 2.1
+  master:
+    jobs:
+      - packages
+      - tests:
+          requires:
+            - packages
+      - lint:
+          requires:
+            - packages
 
 
 
